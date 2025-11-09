@@ -36,6 +36,24 @@
       border-radius: 4px;
       margin-bottom: 15px;
     }
+    #mensagem {
+      display: none;
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 5px;
+      text-align: center;
+      font-weight: bold;
+    }
+    #mensagem.sucesso {
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+    #mensagem.erro {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
   </style>
 </head>
 
@@ -79,11 +97,15 @@
     <button type="submit">Salvar Dados</button>
   </form>
 
+  <!-- Mensagem de feedback -->
+  <div id="mensagem"></div>
+
   <script>
     const form = document.getElementById('arvoreForm');
     const statusElement = document.getElementById('status');
     const latitudeInput = document.getElementById('latitude');
     const longitudeInput = document.getElementById('longitude');
+    const mensagem = document.getElementById('mensagem');
 
     // 🔗 Coloque aqui a URL do seu Apps Script implantado
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzgkbU9qMIWOzldqaNfxCgY70WivzUXqhkt87CYwZXn-3_-R9JuXfP8vjAsZekItgW8/exec';
@@ -102,10 +124,8 @@
     }
 
     function showPosition(position) {
-      // Garante formato fixo com ponto decimal
       const lat = position.coords.latitude.toFixed(8).replace(',', '.');
       const lon = position.coords.longitude.toFixed(8).replace(',', '.');
-
       latitudeInput.value = lat;
       longitudeInput.value = lon;
       statusElement.textContent = "Localização capturada com sucesso!";
@@ -137,13 +157,9 @@
       }
 
       statusElement.textContent = "Enviando dados...";
-
       const formData = new FormData(form);
       const data = {};
-      formData.forEach((value, key) => {
-        // Força formato com ponto decimal para números
-        data[key] = value.toString().replace(',', '.');
-      });
+      formData.forEach((value, key) => data[key] = value.toString().replace(',', '.'));
 
       fetch(SCRIPT_URL, {
         method: 'POST',
@@ -151,14 +167,30 @@
       })
       .then(r => r.text())
       .then(() => {
-        statusElement.textContent = "Dados salvos com sucesso na planilha!";
+        statusElement.textContent = "";
+        mensagem.textContent = "✅ Dados salvos com sucesso!";
+        mensagem.className = "sucesso";
+        mensagem.style.display = "block";
+
+        // limpa os campos após salvar
         form.reset();
         latitudeInput.value = '';
         longitudeInput.value = '';
+
+        // oculta a mensagem após 4 segundos
+        setTimeout(() => {
+          mensagem.style.display = "none";
+        }, 4000);
       })
       .catch(error => {
-        statusElement.textContent = "Erro ao enviar dados.";
+        statusElement.textContent = "";
+        mensagem.textContent = "❌ Erro ao enviar dados.";
+        mensagem.className = "erro";
+        mensagem.style.display = "block";
         console.error(error);
+        setTimeout(() => {
+          mensagem.style.display = "none";
+        }, 4000);
       });
     });
   </script>
