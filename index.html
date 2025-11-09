@@ -74,11 +74,13 @@
             }
         }
 
-        function showPosition(position) {
-            latitudeInput.value = position.coords.latitude;
-            longitudeInput.value = position.coords.longitude;
+            function showPosition(position) {
+            // Garante que o número seja formatado com ponto decimal, independentemente da região
+            latitudeInput.value = position.coords.latitude.toFixed(9).replace(',', '.');
+            longitudeInput.value = position.coords.longitude.toFixed(9).replace(',', '.');
             statusElement.textContent = "Localização capturada com sucesso!";
         }
+
 
         function showError(error) {
             switch(error.code) {
@@ -139,3 +141,4 @@
 
 </body>
 </html>
+
