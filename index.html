@@ -87,7 +87,7 @@
     <select id="saude" name="Saude" required>
       <option value="">Selecione</option>
       <option value="Boa">Boa</option>
-      <option value="Media">Média</option>
+      <option value="Média">Média</option>
       <option value="Ruim">Ruim</option>
     </select>
 
@@ -97,7 +97,6 @@
     <button type="submit">Salvar Dados</button>
   </form>
 
-  <!-- Mensagem de feedback -->
   <div id="mensagem"></div>
 
   <script>
@@ -107,7 +106,7 @@
     const longitudeInput = document.getElementById('longitude');
     const mensagem = document.getElementById('mensagem');
 
-    // 🔗 Coloque aqui a URL do seu Apps Script implantado
+    // ✅ Substitua pela URL do seu Apps Script implantado
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzgkbU9qMIWOzldqaNfxCgY70WivzUXqhkt87CYwZXn-3_-R9JuXfP8vjAsZekItgW8/exec';
 
     function getLocation() {
@@ -124,27 +123,21 @@
     }
 
     function showPosition(position) {
-      const lat = position.coords.latitude.toFixed(8).replace(',', '.');
-      const lon = position.coords.longitude.toFixed(8).replace(',', '.');
-      latitudeInput.value = lat;
-      longitudeInput.value = lon;
+      const lat = position.coords.latitude.toFixed(8);
+      const lon = position.coords.longitude.toFixed(8);
+      latitudeInput.value = lat.replace(',', '.');
+      longitudeInput.value = lon.replace(',', '.');
       statusElement.textContent = "Localização capturada com sucesso!";
     }
 
     function showError(error) {
-      switch (error.code) {
-        case error.PERMISSION_DENIED:
-          statusElement.textContent = "Usuário negou a solicitação de Geolocalização.";
-          break;
-        case error.POSITION_UNAVAILABLE:
-          statusElement.textContent = "Informação de localização indisponível.";
-          break;
-        case error.TIMEOUT:
-          statusElement.textContent = "A solicitação para obter a localização expirou.";
-          break;
-        default:
-          statusElement.textContent = "Ocorreu um erro desconhecido.";
-      }
+      const mensagens = {
+        1: "Usuário negou a solicitação de Geolocalização.",
+        2: "Informação de localização indisponível.",
+        3: "A solicitação para obter a localização expirou.",
+        default: "Ocorreu um erro desconhecido."
+      };
+      statusElement.textContent = mensagens[error.code] || mensagens.default;
       latitudeInput.value = '';
       longitudeInput.value = '';
     }
@@ -165,22 +158,20 @@
         method: 'POST',
         body: new URLSearchParams(data)
       })
-      .then(r => r.text())
-      .then(() => {
+      .then(response => response.text())
+      .then(retorno => {
         statusElement.textContent = "";
-        mensagem.textContent = "✅ Dados salvos com sucesso!";
-        mensagem.className = "sucesso";
+        mensagem.textContent = retorno.includes("sucesso") ?
+          "✅ Dados salvos com sucesso!" :
+          "⚠️ Erro: " + retorno;
+        mensagem.className = retorno.includes("sucesso") ? "sucesso" : "erro";
         mensagem.style.display = "block";
 
-        // limpa os campos após salvar
         form.reset();
         latitudeInput.value = '';
         longitudeInput.value = '';
 
-        // oculta a mensagem após 4 segundos
-        setTimeout(() => {
-          mensagem.style.display = "none";
-        }, 4000);
+        setTimeout(() => mensagem.style.display = "none", 4000);
       })
       .catch(error => {
         statusElement.textContent = "";
@@ -188,9 +179,7 @@
         mensagem.className = "erro";
         mensagem.style.display = "block";
         console.error(error);
-        setTimeout(() => {
-          mensagem.style.display = "none";
-        }, 4000);
+        setTimeout(() => mensagem.style.display = "none", 4000);
       });
     });
   </script>
