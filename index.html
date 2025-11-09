@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Coleta de Dados de Árvores - GPS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        input, select, textarea { width: 100%; padding: 10px; margin: 5px 0 15px 0; display: inline-block; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button { background-color: #4CAF50; color: white; padding: 14px 20px; margin: 8px 0; border: none; border-radius: 4px; cursor: pointer; width: 100%; }
+        button:hover { background-color: #45a049; }
+        .coordenadas { background-color: #f2f2f2; padding: 10px; border-radius: 4px; margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+
+    <h2>Mapeamento de Árvores</h2>
+
+    <form id="arvoreForm">
+        
+        <div class="coordenadas">
+            <p><strong>Localização GPS:</strong></p>
+            <label for="latitude">Latitude:</label>
+            <input type="text" id="latitude" name="Latitude" readonly required>
+
+            <label for="longitude">Longitude:</label>
+            <input type="text" id="longitude" name="Longitude" readonly required>
+            
+            <button type="button" onclick="getLocation()">Capturar Localização</button>
+            <p id="status"></p>
+        </div>
+
+        <label for="especie">Espécie da Árvore:</label>
+        <input type="text" id="especie" name="Especie" required>
+
+        <label for="altura">Altura (m):</label>
+        <input type="number" id="altura" name="Altura" step="0.1" required>
+
+        <label for="dap">DAP (cm):</label>
+        <input type="number" id="dap" name="DAP" step="0.1" required>
+
+        <label for="saude">Condição de Saúde:</label>
+        <select id="saude" name="Saude" required>
+            <option value="">Selecione</option>
+            <option value="Boa">Boa</option>
+            <option value="Media">Média</option>
+            <option value="Ruim">Ruim</option>
+        </select>
+
+        <label for="observacoes">Observações:</label>
+        <textarea id="observacoes" name="Observacoes"></textarea>
+
+        <button type="submit">Salvar Dados</button>
+    </form>
+
+    <script>
+        const form = document.getElementById('arvoreForm');
+        const statusElement = document.getElementById('status');
+        const latitudeInput = document.getElementById('latitude');
+        const longitudeInput = document.getElementById('longitude');
+        
+        // URL de implantação do Google Apps Script (será preenchida no guia)
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzgkbU9qMIWOzldqaNfxCgY70WivzUXqhkt87CYwZXn-3_-R9JuXfP8vjAsZekItgW8/exec'; 
+
+        function getLocation() {
+            statusElement.textContent = "Capturando localização...";
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition, showError, {
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 0
+                });
+            } else {
+                statusElement.textContent = "Geolocalização não é suportada por este navegador.";
+            }
+        }
+
+        function showPosition(position) {
+            latitudeInput.value = position.coords.latitude;
+            longitudeInput.value = position.coords.longitude;
+            statusElement.textContent = "Localização capturada com sucesso!";
+        }
+
+        function showError(error) {
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    statusElement.textContent = "Usuário negou a solicitação de Geolocalização.";
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    statusElement.textContent = "Informação de localização indisponível.";
+                    break;
+                case error.TIMEOUT:
+                    statusElement.textContent = "A solicitação para obter a localização expirou.";
+                    break;
+                case error.UNKNOWN_ERROR:
+                    statusElement.textContent = "Ocorreu um erro desconhecido.";
+                    break;
+            }
+            latitudeInput.value = '';
+            longitudeInput.value = '';
+        }
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (latitudeInput.value === '' || longitudeInput.value === '') {
+                alert("Por favor, capture a localização GPS antes de salvar.");
+                return;
+            }
+
+            statusElement.textContent = "Enviando dados...";
+            
+            const formData = new FormData(form);
+            const data = {};
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
+
+            fetch(SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors', // Necessário para evitar erros CORS no Apps Script
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams(data)
+            })
+            .then(response => {
+                // Como usamos 'no-cors', a resposta será opaca, mas podemos assumir sucesso
+                statusElement.textContent = "Dados salvos com sucesso na planilha!";
+                form.reset();
+                latitudeInput.value = '';
+                longitudeInput.value = '';
+            })
+            .catch(error => {
+                statusElement.textContent = "Erro ao enviar dados. Verifique a URL do script.";
+                console.error('Erro:', error);
+            });
+        });
+    </script>
+
+</body>
+</html>
