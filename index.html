@@ -75,11 +75,13 @@
         }
 
             function showPosition(position) {
-            // Garante que o número seja formatado com ponto decimal, independentemente da região
-            latitudeInput.value = position.coords.latitude.toFixed(9).replace(',', '.');
-            longitudeInput.value = position.coords.longitude.toFixed(9).replace(',', '.');
+            // Garante que o número seja convertido para string com ponto decimal (padrão internacional)
+            // Usamos o método toString() e substituímos a vírgula por ponto, se houver.
+            latitudeInput.value = position.coords.latitude.toString().replace(',', '.');
+            longitudeInput.value = position.coords.longitude.toString().replace(',', '.');
             statusElement.textContent = "Localização capturada com sucesso!";
         }
+
 
 
         function showError(error) {
@@ -141,4 +143,5 @@
 
 </body>
 </html>
+
 
