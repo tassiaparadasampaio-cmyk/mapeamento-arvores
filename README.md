@@ -598,7 +598,7 @@ Universidade Federal de Pelotas (UFPel)
 
 ## 🙏 Agradecimentos
 
-- **Equipe LGA/UFPel e LGEA/UFPel (Laboratório de Geoprocessamento aplicado à análises ambientais** - Desenvolvimento e testes
+- **Equipe LGA/UFPel e LGEA/UFPel (Laboratório de Geoprocessamento aplicado à análise ambiental** - Desenvolvimento e testes
 - **Comunidade QGIS** - Ferramentas open source
 - **Google** - Infraestrutura do Google Sheets
 - **Colaboradores** - Sugestões e feedback
