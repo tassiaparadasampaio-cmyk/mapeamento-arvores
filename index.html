@@ -2,103 +2,247 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Coleta de Dados de Árvores - GPS</title>
+  <title>Coleta de Dados de Árvores - LGA</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
+    /* Paleta de Cores Minimalista do Logotipo */
+    :root {
+      --color-background: #d0d0c0; /* Fundo principal (bege claro) */
+      --color-primary: #403010;    /* Cor principal (marrom escuro) - Textos, botões */
+      --color-secondary: #605030;  /* Cor secundária (marrom médio) - Borda, acentos */
+      --color-light-accent: #c0c0b0; /* Acento claro - Fundo de campos/seções */
+      --color-success: #155724;    /* Verde sucesso (mantido para feedback) */
+      --color-error: #721c24;      /* Vermelho erro (mantido para feedback) */
     }
+
+    /* Reset e Tipografia */
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: var(--color-background);
+      color: var(--color-primary);
+      margin: 0;
+      padding: 20px;
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* Container principal */
+    .container {
+      flex: 1;
+    }
+
+    /* Header com logotipo */
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .logo {
+      max-width: 150px;
+      height: auto;
+      margin-bottom: 15px;
+    }
+
+    h2 {
+      text-align: center;
+      color: var(--color-primary);
+      margin: 0 0 30px 0;
+      font-weight: normal;
+      border-bottom: 2px solid var(--color-secondary);
+      padding-bottom: 10px;
+    }
+
+    /* Formulário e Campos */
+    #arvoreForm {
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #fff; /* Fundo branco para contraste e minimalismo */
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: var(--color-secondary);
+      font-size: 0.9em;
+    }
+
     input, select, textarea {
       width: 100%;
-      padding: 10px;
+      padding: 12px;
       margin: 5px 0 15px 0;
       display: inline-block;
-      border: 1px solid #ccc;
+      border: 1px solid var(--color-secondary);
       border-radius: 4px;
       box-sizing: border-box;
+      background-color: var(--color-light-accent);
+      color: var(--color-primary);
+      font-size: 1em;
+      transition: border-color 0.3s;
     }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--color-primary);
+      outline: none;
+    }
+
+    /* Seção de Coordenadas (Destaque) */
+    .coordenadas {
+      background-color: var(--color-light-accent);
+      padding: 15px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      border: 1px solid var(--color-secondary);
+    }
+    
+    .coordenadas p strong {
+        color: var(--color-primary);
+    }
+
+    /* Botões */
     button {
-      background-color: #4CAF50;
-      color: white;
+      background-color: var(--color-primary);
+      color: var(--color-background); /* Texto claro no botão escuro */
       padding: 14px 20px;
-      margin: 8px 0;
+      margin: 10px 0;
       border: none;
       border-radius: 4px;
       cursor: pointer;
       width: 100%;
+      font-size: 1.1em;
+      font-weight: bold;
+      transition: background-color 0.3s, opacity 0.3s;
     }
+
     button:hover {
-      background-color: #45a049;
+      background-color: var(--color-secondary);
+      opacity: 0.9;
     }
-    .coordenadas {
-      background-color: #f2f2f2;
-      padding: 10px;
-      border-radius: 4px;
-      margin-bottom: 15px;
+    
+    button[type="button"] {
+        background-color: var(--color-secondary);
     }
+    
+    button[type="button"]:hover {
+        background-color: var(--color-primary);
+    }
+
+    /* Mensagens de Feedback */
     #mensagem {
       display: none;
-      margin-top: 10px;
-      padding: 10px;
+      margin-top: 20px;
+      padding: 15px;
       border-radius: 5px;
       text-align: center;
       font-weight: bold;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
     }
+
     #mensagem.sucesso {
-      background-color: #d4edda;
-      color: #155724;
+      background-color: #d4edda; /* Fundo verde claro */
+      color: var(--color-success);
       border: 1px solid #c3e6cb;
     }
+
     #mensagem.erro {
-      background-color: #f8d7da;
-      color: #721c24;
+      background-color: #f8d7da; /* Fundo vermelho claro */
+      color: var(--color-error);
       border: 1px solid #f5c6cb;
+    }
+    
+    /* Estilo para campos readonly */
+    input[readonly] {
+        background-color: #f0f0f0;
+        border-style: dashed;
+        color: #888;
+    }
+
+    /* Footer com Made By */
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid var(--color-secondary);
+      color: var(--color-secondary);
+      font-size: 0.85em;
+    }
+
+    .footer p {
+      margin: 5px 0;
+    }
+
+    .footer strong {
+      color: var(--color-primary);
+    }
+    
+    /* Media Query para telas maiores (opcional, mas bom para desktop) */
+    @media (min-width: 600px) {
+        #arvoreForm {
+            padding: 30px;
+        }
     }
   </style>
 </head>
 
 <body>
-  <h2>Mapeamento de Árvores</h2>
-
-  <form id="arvoreForm">
-    <div class="coordenadas">
-      <p><strong>Localização GPS:</strong></p>
-
-      <label for="latitude">Latitude:</label>
-      <input type="text" id="latitude" name="Latitude" readonly required>
-
-      <label for="longitude">Longitude:</label>
-      <input type="text" id="longitude" name="Longitude" readonly required>
-
-      <button type="button" onclick="getLocation()">Capturar Localização</button>
-      <p id="status"></p>
+  <div class="container">
+    <div class="header">
+      <img src="logo-lga.png" alt="Logo Laboratório de Gestão Arbórea" class="logo">
+      <h2>Mapeamento de Árvores</h2>
     </div>
 
-    <label for="especie">Espécie da Árvore:</label>
-    <input type="text" id="especie" name="Especie" required>
+    <form id="arvoreForm">
+      <div class="coordenadas">
+        <p><strong>Localização GPS:</strong></p>
 
-    <label for="altura">Altura (m):</label>
-    <input type="number" id="altura" name="Altura" step="0.1" required>
+        <label for="latitude">Latitude:</label>
+        <input type="text" id="latitude" name="Latitude" readonly required>
 
-    <label for="dap">DAP (cm):</label>
-    <input type="number" id="dap" name="DAP" step="0.1" required>
+        <label for="longitude">Longitude:</label>
+        <input type="text" id="longitude" name="Longitude" readonly required>
 
-    <label for="saude">Condição de Saúde:</label>
-    <select id="saude" name="Saude" required>
-      <option value="">Selecione</option>
-      <option value="Boa">Boa</option>
-      <option value="Media">Média</option>
-      <option value="Ruim">Ruim</option>
-    </select>
+        <button type="button" onclick="getLocation()">Capturar Localização</button>
+        <p id="status"></p>
+      </div>
 
-    <label for="observacoes">Observações:</label>
-    <textarea id="observacoes" name="Observacoes"></textarea>
+      <label for="especie">Espécie da Árvore:</label>
+      <input type="text" id="especie" name="Especie" required>
 
-    <button type="submit">Salvar Dados</button>
-  </form>
+      <label for="altura">Altura (m):</label>
+      <input type="number" id="altura" name="Altura" step="0.1" required>
 
-  <div id="mensagem"></div>
+      <label for="dap">DAP (cm):</label>
+      <input type="number" id="dap" name="DAP" step="0.1" required>
+
+      <label for="saude">Condição de Saúde:</label>
+      <select id="saude" name="Saude" required>
+        <option value="">Selecione</option>
+        <option value="Boa">Boa</option>
+        <option value="Media">Média</option>
+        <option value="Ruim">Ruim</option>
+      </select>
+
+      <label for="observacoes">Observações:</label>
+      <textarea id="observacoes" name="Observacoes"></textarea>
+
+      <button type="submit">Salvar Dados</button>
+    </form>
+
+    <div id="mensagem"></div>
+  </div>
+
+  <div class="footer">
+    <p><strong>Laboratório de Gestão Arbórea - LGA</strong></p>
+    <p>Desenvolvido por Laboratório de Gestão Arbórea</p>
+  </div>
 
   <script>
     const form = document.getElementById('arvoreForm');
@@ -107,6 +251,7 @@
     const longitudeInput = document.getElementById('longitude');
     const mensagem = document.getElementById('mensagem');
 
+    // URL do App Script (mantida a original)
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzgkbU9qMIWOzldqaNfxCgY70WivzUXqhkt87CYwZXn-3_-R9JuXfP8vjAsZekItgW8/exec';
 
     function getLocation() {
@@ -153,12 +298,12 @@
       const formData = new FormData(form);
       const data = {};
       
-      // ✅ Garante encoding UTF-8 correto
+      // Garante encoding UTF-8 correto e substitui vírgula por ponto para o App Script
       formData.forEach((value, key) => {
         data[key] = value.toString().replace(',', '.');
       });
 
-      // ✅ Envia com header UTF-8 explícito
+      // Envia com header UTF-8 explícito
       fetch(SCRIPT_URL, {
         method: 'POST',
         headers: {
