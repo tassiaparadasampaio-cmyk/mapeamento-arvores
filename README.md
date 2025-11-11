@@ -174,7 +174,7 @@ graph LR
 
 ### Visualização no QGIS
 
-![Screenshot QGIS](docs/images/qgis-screenshot-placeholder.png)
+![Screenshot QGIS](print.png)
 *Camada de pontos sincronizada automaticamente*
 
 ---
