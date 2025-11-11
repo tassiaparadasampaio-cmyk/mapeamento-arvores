@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="UTF-8">
   <title>Coleta de Dados de Árvores - GPS</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
@@ -87,7 +88,7 @@
     <select id="saude" name="Saude" required>
       <option value="">Selecione</option>
       <option value="Boa">Boa</option>
-      <option value="Média">Média</option>
+      <option value="Media">Média</option>
       <option value="Ruim">Ruim</option>
     </select>
 
@@ -106,7 +107,6 @@
     const longitudeInput = document.getElementById('longitude');
     const mensagem = document.getElementById('mensagem');
 
-    // ✅ Substitua pela URL do seu Apps Script implantado
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzgkbU9qMIWOzldqaNfxCgY70WivzUXqhkt87CYwZXn-3_-R9JuXfP8vjAsZekItgW8/exec';
 
     function getLocation() {
@@ -152,10 +152,18 @@
       statusElement.textContent = "Enviando dados...";
       const formData = new FormData(form);
       const data = {};
-      formData.forEach((value, key) => data[key] = value.toString().replace(',', '.'));
+      
+      // ✅ Garante encoding UTF-8 correto
+      formData.forEach((value, key) => {
+        data[key] = value.toString().replace(',', '.');
+      });
 
+      // ✅ Envia com header UTF-8 explícito
       fetch(SCRIPT_URL, {
         method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+        },
         body: new URLSearchParams(data)
       })
       .then(response => response.text())
