@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Logo LGA](https://page.gensparksite.com/v1/base64_upload/da962a8952316f51dd4e4ef35f61fffd)
+![Logo LGA](logo-lga.png)
 
 **Laboratório de Gestão Arbórea - UFPel**
 
