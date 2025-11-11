@@ -5,14 +5,14 @@
   <title>Coleta de Dados de Árvores - LGA</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    /* Paleta de Cores Minimalista do Logotipo */
+    /* Paleta de Cores Ajustada ao Fundo do Logotipo */
     :root {
-      --color-background: #d0d0c0; /* Fundo principal (bege claro) */
-      --color-primary: #403010;    /* Cor principal (marrom escuro) - Textos, botões */
-      --color-secondary: #605030;  /* Cor secundária (marrom médio) - Borda, acentos */
-      --color-light-accent: #c0c0b0; /* Acento claro - Fundo de campos/seções */
-      --color-success: #155724;    /* Verde sucesso (mantido para feedback) */
-      --color-error: #721c24;      /* Vermelho erro (mantido para feedback) */
+      --color-background: #dcd3be; /* Cor idêntica ao fundo do logo */
+      --color-primary: #403010;    /* Marrom escuro */
+      --color-secondary: #605030;  /* Marrom médio */
+      --color-light-accent: #cfc7b3; /* Acento claro harmonizado */
+      --color-success: #155724;
+      --color-error: #721c24;
     }
 
     /* Reset e Tipografia */
@@ -59,7 +59,7 @@
       max-width: 400px;
       margin: 0 auto;
       padding: 20px;
-      background-color: #fff; /* Fundo branco para contraste e minimalismo */
+      background-color: #fff;
       border-radius: 8px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
@@ -92,7 +92,6 @@
       outline: none;
     }
 
-    /* Seção de Coordenadas (Destaque) */
     .coordenadas {
       background-color: var(--color-light-accent);
       padding: 15px;
@@ -105,10 +104,9 @@
         color: var(--color-primary);
     }
 
-    /* Botões */
     button {
       background-color: var(--color-primary);
-      color: var(--color-background); /* Texto claro no botão escuro */
+      color: var(--color-background);
       padding: 14px 20px;
       margin: 10px 0;
       border: none;
@@ -133,7 +131,6 @@
         background-color: var(--color-primary);
     }
 
-    /* Mensagens de Feedback */
     #mensagem {
       display: none;
       margin-top: 20px;
@@ -147,25 +144,23 @@
     }
 
     #mensagem.sucesso {
-      background-color: #d4edda; /* Fundo verde claro */
+      background-color: #d4edda;
       color: var(--color-success);
       border: 1px solid #c3e6cb;
     }
 
     #mensagem.erro {
-      background-color: #f8d7da; /* Fundo vermelho claro */
+      background-color: #f8d7da;
       color: var(--color-error);
       border: 1px solid #f5c6cb;
     }
     
-    /* Estilo para campos readonly */
     input[readonly] {
         background-color: #f0f0f0;
         border-style: dashed;
         color: #888;
     }
 
-    /* Footer com Made By */
     .footer {
       text-align: center;
       margin-top: 40px;
@@ -183,7 +178,6 @@
       color: var(--color-primary);
     }
     
-    /* Media Query para telas maiores (opcional, mas bom para desktop) */
     @media (min-width: 600px) {
         #arvoreForm {
             padding: 30px;
@@ -241,7 +235,7 @@
 
   <div class="footer">
     <p><strong>Laboratório de Gestão Arbórea - LGA</strong></p>
-    <p>Desenvolvido por Laboratório de Gestão Arbórea</p>
+    <p>Desenvolvido por LGA - UFPel</p>
   </div>
 
   <script>
@@ -251,7 +245,6 @@
     const longitudeInput = document.getElementById('longitude');
     const mensagem = document.getElementById('mensagem');
 
-    // URL do App Script (mantida a original)
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzgkbU9qMIWOzldqaNfxCgY70WivzUXqhkt87CYwZXn-3_-R9JuXfP8vjAsZekItgW8/exec';
 
     function getLocation() {
@@ -298,12 +291,10 @@
       const formData = new FormData(form);
       const data = {};
       
-      // Garante encoding UTF-8 correto e substitui vírgula por ponto para o App Script
       formData.forEach((value, key) => {
         data[key] = value.toString().replace(',', '.');
       });
 
-      // Envia com header UTF-8 explícito
       fetch(SCRIPT_URL, {
         method: 'POST',
         headers: {
