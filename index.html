@@ -574,7 +574,7 @@
         }
       });
       
-      // CHECKBOXES - ENVIA TODOS EXPLICITAMENTE
+      // CHECKBOXES - LISTA COMPLETA E CORRETA
       const checkboxes = [
         'Cupim_Broca', 'Tronco_Oco_Cancro', 'Fungos_Apodrecedores',
         'Epifitas_Parasitas', 'Galhos_Secos', 'Abelhas_Vespas', 'Exsudacao',
@@ -584,18 +584,20 @@
       
       checkboxes.forEach(campo => {
         const checkbox = document.querySelector(`[name="${campo}"]`);
-        if (checkbox) {
-          formData.append(campo, checkbox.checked ? 'Sim' : 'Não');
-        }
+        formData.append(campo, checkbox && checkbox.checked ? 'Sim' : 'Não');
       });
+
+      // DEBUG: Mostrar todos os dados no console
+      console.log('=== DADOS SENDO ENVIADOS ===');
+      for (let [key, value] of formData.entries()) {
+        console.log(`${key}: ${value}`);
+      }
 
       // Converte FormData para URLSearchParams
       const params = new URLSearchParams();
       for (let pair of formData.entries()) {
         params.append(pair[0], pair[1]);
       }
-
-      console.log('Dados sendo enviados:', Object.fromEntries(params));
 
       fetch(SCRIPT_URL, {
         method: 'POST',
