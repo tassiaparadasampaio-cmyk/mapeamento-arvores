@@ -7,15 +7,14 @@
   <style>
     /* Paleta de Cores Ajustada ao Fundo do Logotipo */
     :root {
-      --color-background: #dcd3be; /* Cor idêntica ao fundo do logo */
-      --color-primary: #403010;    /* Marrom escuro */
-      --color-secondary: #605030;  /* Marrom médio */
-      --color-light-accent: #cfc7b3; /* Acento claro harmonizado */
+      --color-background: #dcd3be;
+      --color-primary: #403010;
+      --color-secondary: #605030;
+      --color-light-accent: #cfc7b3;
       --color-success: #155724;
       --color-error: #721c24;
     }
 
-    /* Reset e Tipografia */
     body {
       font-family: 'Arial', sans-serif;
       background-color: var(--color-background);
@@ -28,12 +27,10 @@
       min-height: 100vh;
     }
 
-    /* Container principal */
     .container {
       flex: 1;
     }
 
-    /* Header com logotipo */
     .header {
       text-align: center;
       margin-bottom: 30px;
@@ -54,7 +51,6 @@
       padding-bottom: 10px;
     }
 
-    /* Formulário e Campos */
     #arvoreForm {
       max-width: 600px;
       margin: 0 auto;
@@ -125,13 +121,11 @@
       min-height: 80px;
     }
 
-    /* Estilo para input de arquivo */
     input[type="file"] {
       padding: 8px;
       background-color: var(--color-light-accent);
     }
 
-    /* Checkboxes em linha */
     .checkbox-group {
       display: flex;
       flex-wrap: wrap;
@@ -159,7 +153,6 @@
       cursor: pointer;
     }
 
-    /* Preview de foto */
     .photo-preview {
       margin-top: 10px;
       text-align: center;
@@ -388,31 +381,31 @@
         <label>Problemas Identificados:</label>
         <div class="checkbox-group">
           <div class="checkbox-item">
-            <input type="checkbox" id="cupim" name="Cupim_Broca">
+            <input type="checkbox" id="cupim" name="Cupim_Broca" value="Sim">
             <label for="cupim">Cupim ou broca</label>
           </div>
           <div class="checkbox-item">
-            <input type="checkbox" id="tronco_oco" name="Tronco_Oco_Cancro">
+            <input type="checkbox" id="tronco_oco" name="Tronco_Oco_Cancro" value="Sim">
             <label for="tronco_oco">Tronco oco/cancro</label>
           </div>
           <div class="checkbox-item">
-            <input type="checkbox" id="fungos" name="Fungos_Apodrecedores">
+            <input type="checkbox" id="fungos" name="Fungos_Apodrecedores" value="Sim">
             <label for="fungos">Fungos apodrecedores</label>
           </div>
           <div class="checkbox-item">
-            <input type="checkbox" id="epifitas" name="Epifitas_Parasitas">
+            <input type="checkbox" id="epifitas" name="Epifitas_Parasitas" value="Sim">
             <label for="epifitas">Epífitas/parasitas</label>
           </div>
           <div class="checkbox-item">
-            <input type="checkbox" id="galhos_secos" name="Galhos_Secos">
+            <input type="checkbox" id="galhos_secos" name="Galhos_Secos" value="Sim">
             <label for="galhos_secos">Galhos secos</label>
           </div>
           <div class="checkbox-item">
-            <input type="checkbox" id="abelhas" name="Abelhas_Vespas">
+            <input type="checkbox" id="abelhas" name="Abelhas_Vespas" value="Sim">
             <label for="abelhas">Abelhas/vespas</label>
           </div>
           <div class="checkbox-item">
-            <input type="checkbox" id="exsudacao" name="Exsudacao">
+            <input type="checkbox" id="exsudacao" name="Exsudacao" value="Sim">
             <label for="exsudacao">Exsudação</label>
           </div>
         </div>
@@ -488,31 +481,31 @@
         <label>Conflitos Identificados:</label>
         <div class="checkbox-group">
           <div class="checkbox-item">
-            <input type="checkbox" id="risco_galhos" name="Risco_Queda_Galhos">
+            <input type="checkbox" id="risco_galhos" name="Risco_Queda_Galhos" value="Sim">
             <label for="risco_galhos">Risco de queda galhos</label>
           </div>
           <div class="checkbox-item">
-            <input type="checkbox" id="risco_total" name="Risco_Queda_Total">
+            <input type="checkbox" id="risco_total" name="Risco_Queda_Total" value="Sim">
             <label for="risco_total">Risco queda total</label>
           </div>
           <div class="checkbox-item">
-            <input type="checkbox" id="rede_eletrica" name="Rede_Eletrica">
+            <input type="checkbox" id="rede_eletrica" name="Rede_Eletrica" value="Sim">
             <label for="rede_eletrica">Rede elétrica</label>
           </div>
           <div class="checkbox-item">
-            <input type="checkbox" id="pavimento" name="Pavimento">
+            <input type="checkbox" id="pavimento" name="Pavimento" value="Sim">
             <label for="pavimento">Pavimento</label>
           </div>
           <div class="checkbox-item">
-            <input type="checkbox" id="patrimonio" name="Patrimonio">
+            <input type="checkbox" id="patrimonio" name="Patrimonio" value="Sim">
             <label for="patrimonio">Patrimônio (casas, telhados)</label>
           </div>
           <div class="checkbox-item">
-            <input type="checkbox" id="acesso_veiculos" name="Acesso_Veiculos">
+            <input type="checkbox" id="acesso_veiculos" name="Acesso_Veiculos" value="Sim">
             <label for="acesso_veiculos">Acesso de veículos</label>
           </div>
           <div class="checkbox-item">
-            <input type="checkbox" id="acessibilidade" name="Acessibilidade">
+            <input type="checkbox" id="acessibilidade" name="Acessibilidade" value="Sim">
             <label for="acessibilidade">Acessibilidade</label>
           </div>
         </div>
@@ -598,6 +591,7 @@
 
     form.addEventListener('submit', function(e) {
       e.preventDefault();
+      
       if (!latitudeInput.value || !longitudeInput.value) {
         alert("Por favor, capture a localização GPS antes de salvar.");
         return;
@@ -608,12 +602,11 @@
 
       // Processa a foto se existir
       const file = fotoInput.files[0];
-      let fotoBase64 = '';
       
       if (file) {
         const reader = new FileReader();
         reader.onload = function(event) {
-          fotoBase64 = event.target.result; // Inclui o data:image/...;base64,
+          const fotoBase64 = event.target.result;
           enviarDados(fotoBase64);
         };
         reader.readAsDataURL(file);
@@ -623,15 +616,26 @@
     });
 
     function enviarDados(fotoBase64) {
-      const formData = new FormData(form);
+      // Coleta todos os dados do formulário
       const data = {};
       
-      formData.forEach((value, key) => {
-        // Converte valores de checkbox para "Sim" ou "Não"
-        if (value === 'on') {
-          data[key] = 'Sim';
-        } else {
-          data[key] = value.toString().replace(',', '.');
+      // Campos de texto e select
+      const inputs = form.querySelectorAll('input[type="text"], input[type="number"], select');
+      inputs.forEach(input => {
+        if (input.name && !input.readOnly) {
+          data[input.name] = input.value || '';
+        }
+      });
+      
+      // Latitude e Longitude (readonly mas precisam ser enviados)
+      data['Latitude'] = latitudeInput.value;
+      data['Longitude'] = longitudeInput.value;
+      
+      // CORREÇÃO CRÍTICA: Processa TODOS os checkboxes explicitamente
+      const checkboxes = form.querySelectorAll('input[type="checkbox"]');
+      checkboxes.forEach(checkbox => {
+        if (checkbox.name) {
+          data[checkbox.name] = checkbox.checked ? 'Sim' : 'Não';
         }
       });
 
@@ -639,6 +643,8 @@
       if (fotoBase64) {
         data['Foto_Base64'] = fotoBase64;
       }
+
+      console.log('Dados sendo enviados:', data); // Para debug
 
       fetch(SCRIPT_URL, {
         method: 'POST',
@@ -657,20 +663,22 @@
         mensagem.className = retorno.includes("sucesso") ? "sucesso" : "erro";
         mensagem.style.display = "block";
 
-        form.reset();
-        photoPreview.innerHTML = '';
-        latitudeInput.value = '';
-        longitudeInput.value = '';
+        if (retorno.includes("sucesso")) {
+          form.reset();
+          photoPreview.innerHTML = '';
+          latitudeInput.value = '';
+          longitudeInput.value = '';
+        }
 
         setTimeout(() => mensagem.style.display = "none", 4000);
       })
       .catch(error => {
         loadingElement.classList.remove('active');
         statusElement.textContent = "";
-        mensagem.textContent = "❌ Erro ao enviar dados.";
+        mensagem.textContent = "❌ Erro ao enviar dados: " + error.message;
         mensagem.className = "erro";
         mensagem.style.display = "block";
-        console.error(error);
+        console.error('Erro:', error);
         setTimeout(() => mensagem.style.display = "none", 4000);
       });
     }
