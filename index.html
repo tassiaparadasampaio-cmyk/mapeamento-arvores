@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Coleta de Dados de Árvores - LGA</title>
+  <title>Ficha de Avaliação de Arborização - LGA</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     /* Paleta de Cores Ajustada ao Fundo do Logotipo */
@@ -56,7 +56,7 @@
 
     /* Formulário e Campos */
     #arvoreForm {
-      max-width: 400px;
+      max-width: 600px;
       margin: 0 auto;
       padding: 20px;
       background-color: #fff;
@@ -64,9 +64,38 @@
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 
+    .form-section {
+      margin-bottom: 25px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--color-light-accent);
+    }
+
+    .form-section:last-of-type {
+      border-bottom: none;
+    }
+
+    .section-title {
+      font-weight: bold;
+      color: var(--color-primary);
+      font-size: 1.1em;
+      margin-bottom: 15px;
+      margin-top: 0;
+      padding-top: 10px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+
+    .form-row.full {
+      grid-template-columns: 1fr;
+    }
+
     label {
       display: block;
-      margin-top: 15px;
       margin-bottom: 5px;
       font-weight: bold;
       color: var(--color-secondary);
@@ -76,7 +105,6 @@
     input, select, textarea {
       width: 100%;
       padding: 12px;
-      margin: 5px 0 15px 0;
       display: inline-block;
       border: 1px solid var(--color-secondary);
       border-radius: 4px;
@@ -90,6 +118,64 @@
     input:focus, select:focus, textarea:focus {
       border-color: var(--color-primary);
       outline: none;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    /* Estilo para input de arquivo */
+    input[type="file"] {
+      padding: 8px;
+      background-color: var(--color-light-accent);
+    }
+
+    /* Checkboxes em linha */
+    .checkbox-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-top: 10px;
+    }
+
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .checkbox-item input[type="checkbox"] {
+      width: auto;
+      margin: 0;
+      padding: 0;
+      cursor: pointer;
+    }
+
+    .checkbox-item label {
+      margin: 0;
+      font-weight: normal;
+      font-size: 0.95em;
+      cursor: pointer;
+    }
+
+    /* Preview de foto */
+    .photo-preview {
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    .photo-preview img {
+      max-width: 100%;
+      max-height: 300px;
+      border-radius: 4px;
+      border: 2px solid var(--color-secondary);
+    }
+
+    .photo-preview p {
+      color: var(--color-secondary);
+      font-size: 0.9em;
+      margin: 10px 0 0 0;
     }
 
     .coordenadas {
@@ -138,7 +224,7 @@
       border-radius: 5px;
       text-align: center;
       font-weight: bold;
-      max-width: 400px;
+      max-width: 600px;
       margin-left: auto;
       margin-right: auto;
     }
@@ -177,10 +263,26 @@
     .footer strong {
       color: var(--color-primary);
     }
+
+    .loading {
+      display: none;
+      text-align: center;
+      color: var(--color-primary);
+      margin: 10px 0;
+      font-weight: bold;
+    }
+
+    .loading.active {
+      display: block;
+    }
     
-    @media (min-width: 600px) {
+    @media (max-width: 600px) {
+        .form-row {
+            grid-template-columns: 1fr;
+        }
+        
         #arvoreForm {
-            padding: 30px;
+            padding: 15px;
         }
     }
   </style>
@@ -190,43 +292,239 @@
   <div class="container">
     <div class="header">
       <img src="logo-lga2.png" alt="Logo Laboratório de Gestão Arbórea" class="logo">
-      <h2>Mapeamento de Árvores</h2>
+      <h2>Ficha de Avaliação de Arborização</h2>
     </div>
 
     <form id="arvoreForm">
-      <div class="coordenadas">
-        <p><strong>Localização GPS:</strong></p>
+      <!-- Seção de Localização GPS -->
+      <div class="form-section">
+        <div class="coordenadas">
+          <p><strong>Localização GPS:</strong></p>
 
-        <label for="latitude">Latitude:</label>
-        <input type="text" id="latitude" name="Latitude" readonly required>
+          <label for="latitude">Latitude:</label>
+          <input type="text" id="latitude" name="Latitude" readonly required>
 
-        <label for="longitude">Longitude:</label>
-        <input type="text" id="longitude" name="Longitude" readonly required>
+          <label for="longitude">Longitude:</label>
+          <input type="text" id="longitude" name="Longitude" readonly required>
 
-        <button type="button" onclick="getLocation()">Capturar Localização</button>
-        <p id="status"></p>
+          <button type="button" onclick="getLocation()">Capturar Localização</button>
+          <p id="status"></p>
+        </div>
       </div>
 
-      <label for="especie">Espécie da Árvore:</label>
-      <input type="text" id="especie" name="Especie" required>
+      <!-- Seção de Identificação da Árvore -->
+      <div class="form-section">
+        <h3 class="section-title">Identificação da Árvore</h3>
+        
+        <div class="form-row full">
+          <label for="microrregiao">Microrregião:</label>
+          <input type="text" id="microrregiao" name="Microrregiao">
+        </div>
 
-      <label for="altura">Altura (m):</label>
-      <input type="number" id="altura" name="Altura" step="0.1" required>
+        <div class="form-row full">
+          <label for="endereco">Endereço:</label>
+          <input type="text" id="endereco" name="Endereco">
+        </div>
 
-      <label for="dap">DAP (cm):</label>
-      <input type="number" id="dap" name="DAP" step="0.1" required>
+        <div class="form-row">
+          <div>
+            <label for="especie_cientifica">Espécie (nome científico):</label>
+            <input type="text" id="especie_cientifica" name="Especie_Cientifica">
+          </div>
+          <div>
+            <label for="familia">Família:</label>
+            <input type="text" id="familia" name="Familia">
+          </div>
+        </div>
 
-      <label for="saude">Condição de Saúde:</label>
-      <select id="saude" name="Saude" required>
-        <option value="">Selecione</option>
-        <option value="Boa">Boa</option>
-        <option value="Media">Média</option>
-        <option value="Ruim">Ruim</option>
-      </select>
+        <div class="form-row">
+          <div>
+            <label for="nome_popular">Nome popular:</label>
+            <input type="text" id="nome_popular" name="Nome_Popular">
+          </div>
+          <div>
+            <label for="porte">Porte:</label>
+            <select id="porte" name="Porte">
+              <option value="">Selecione</option>
+              <option value="Pequeno">Pequeno</option>
+              <option value="Médio">Médio</option>
+              <option value="Grande">Grande</option>
+            </select>
+          </div>
+        </div>
 
-      <label for="observacoes">Observações:</label>
-      <textarea id="observacoes" name="Observacoes"></textarea>
+        <div class="form-row">
+          <div>
+            <label for="origem">Origem:</label>
+            <select id="origem" name="Origem">
+              <option value="">Selecione</option>
+              <option value="Nativa">Nativa</option>
+              <option value="Exótica">Exótica</option>
+              <option value="Exótica Invasora">Exótica Invasora</option>
+            </select>
+          </div>
+          <div>
+            <label for="dap">DAP (a 1,3 m) [cm]:</label>
+            <input type="number" id="dap" name="DAP" step="0.1">
+          </div>
+        </div>
+      </div>
 
+      <!-- Seção de Foto -->
+      <div class="form-section">
+        <h3 class="section-title">📷 Captura de Foto</h3>
+        
+        <div class="form-row full">
+          <label for="foto">Tirar Foto da Árvore:</label>
+          <input type="file" id="foto" name="Foto" accept="image/*" capture="camera">
+          <div class="photo-preview" id="photoPreview"></div>
+        </div>
+      </div>
+
+      <!-- Seção de Condição Fitossanitária -->
+      <div class="form-section">
+        <h3 class="section-title">Condição Fitossanitária</h3>
+        
+        <label>Problemas Identificados:</label>
+        <div class="checkbox-group">
+          <div class="checkbox-item">
+            <input type="checkbox" id="cupim" name="Cupim_Broca">
+            <label for="cupim">Cupim ou broca</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="tronco_oco" name="Tronco_Oco_Cancro">
+            <label for="tronco_oco">Tronco oco/cancro</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="fungos" name="Fungos_Apodrecedores">
+            <label for="fungos">Fungos apodrecedores</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="epifitas" name="Epifitas_Parasitas">
+            <label for="epifitas">Epífitas/parasitas</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="galhos_secos" name="Galhos_Secos">
+            <label for="galhos_secos">Galhos secos</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="abelhas" name="Abelhas_Vespas">
+            <label for="abelhas">Abelhas/vespas</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="exsudacao" name="Exsudacao">
+            <label for="exsudacao">Exsudação</label>
+          </div>
+        </div>
+
+        <div class="form-row full" style="margin-top: 15px;">
+          <label for="outro_fitossanitario">Outro problema:</label>
+          <input type="text" id="outro_fitossanitario" name="Outro_Fitossanitario">
+        </div>
+      </div>
+
+      <!-- Seção de Riscos à Pessoas -->
+      <div class="form-section">
+        <h3 class="section-title">Riscos à Pessoas</h3>
+        
+        <div class="form-row">
+          <div>
+            <label for="toxica">Espécie tóxica?</label>
+            <select id="toxica" name="Especie_Toxica">
+              <option value="">Selecione</option>
+              <option value="Sim">Sim</option>
+              <option value="Sem informações">Sem informações</option>
+            </select>
+          </div>
+          <div>
+            <label for="aculeios">Presença de acúleos/espinhos?</label>
+            <select id="aculeios" name="Aculeios_Espinhos">
+              <option value="">Selecione</option>
+              <option value="Sim">Sim</option>
+              <option value="Não">Não</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Seção de Condições do Canteiro -->
+      <div class="form-section">
+        <h3 class="section-title">Condições do Canteiro</h3>
+        
+        <div class="form-row full">
+          <label for="dimensoes">Dimensões (medir e colocar aqui):</label>
+          <input type="text" id="dimensoes" name="Dimensoes_Canteiro" placeholder="Ex: 1,5m x 1,5m">
+        </div>
+
+        <div class="form-row">
+          <div>
+            <label for="canteiro_80cm">Canteiro respeita o mínimo de 80 cm?</label>
+            <select id="canteiro_80cm" name="Canteiro_80cm">
+              <option value="">Selecione</option>
+              <option value="Sim">Sim</option>
+              <option value="Não">Não</option>
+            </select>
+          </div>
+          <div>
+            <label for="largura_passeio">Largura do passeio (calçada) [m]:</label>
+            <input type="number" id="largura_passeio" name="Largura_Passeio" step="0.01">
+          </div>
+        </div>
+
+        <div class="form-row full">
+          <label for="passeio_125m">Respeita o mínimo 1,25 m de passeio?</label>
+          <select id="passeio_125m" name="Passeio_125m">
+            <option value="">Selecione</option>
+            <option value="Sim">Sim</option>
+            <option value="Não">Não</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Seção de Conflitos -->
+      <div class="form-section">
+        <h3 class="section-title">Tipo de Conflito</h3>
+        
+        <label>Conflitos Identificados:</label>
+        <div class="checkbox-group">
+          <div class="checkbox-item">
+            <input type="checkbox" id="risco_galhos" name="Risco_Queda_Galhos">
+            <label for="risco_galhos">Risco de queda galhos</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="risco_total" name="Risco_Queda_Total">
+            <label for="risco_total">Risco queda total</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="rede_eletrica" name="Rede_Eletrica">
+            <label for="rede_eletrica">Rede elétrica</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="pavimento" name="Pavimento">
+            <label for="pavimento">Pavimento</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="patrimonio" name="Patrimonio">
+            <label for="patrimonio">Patrimônio (casas, telhados)</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="acesso_veiculos" name="Acesso_Veiculos">
+            <label for="acesso_veiculos">Acesso de veículos</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="acessibilidade" name="Acessibilidade">
+            <label for="acessibilidade">Acessibilidade</label>
+          </div>
+        </div>
+
+        <div class="form-row full" style="margin-top: 15px;">
+          <label for="outro_conflito">Outro conflito:</label>
+          <input type="text" id="outro_conflito" name="Outro_Conflito">
+        </div>
+      </div>
+
+      <!-- Botão de Envio -->
+      <div class="loading" id="loading">Enviando dados e foto...</div>
       <button type="submit">Salvar Dados</button>
     </form>
 
@@ -244,8 +542,26 @@
     const latitudeInput = document.getElementById('latitude');
     const longitudeInput = document.getElementById('longitude');
     const mensagem = document.getElementById('mensagem');
+    const fotoInput = document.getElementById('foto');
+    const photoPreview = document.getElementById('photoPreview');
+    const loadingElement = document.getElementById('loading');
 
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzgkbU9qMIWOzldqaNfxCgY70WivzUXqhkt87CYwZXn-3_-R9JuXfP8vjAsZekItgW8/exec';
+
+    // Função para capturar e exibir preview da foto
+    fotoInput.addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          photoPreview.innerHTML = `
+            <img src="${event.target.result}" alt="Preview da foto">
+            <p>✅ Foto capturada com sucesso</p>
+          `;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
 
     function getLocation() {
       statusElement.textContent = "Capturando localização...";
@@ -287,13 +603,42 @@
         return;
       }
 
+      loadingElement.classList.add('active');
       statusElement.textContent = "Enviando dados...";
+
+      // Processa a foto se existir
+      const file = fotoInput.files[0];
+      let fotoBase64 = '';
+      
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          fotoBase64 = event.target.result; // Inclui o data:image/...;base64,
+          enviarDados(fotoBase64);
+        };
+        reader.readAsDataURL(file);
+      } else {
+        enviarDados('');
+      }
+    });
+
+    function enviarDados(fotoBase64) {
       const formData = new FormData(form);
       const data = {};
       
       formData.forEach((value, key) => {
-        data[key] = value.toString().replace(',', '.');
+        // Converte valores de checkbox para "Sim" ou "Não"
+        if (value === 'on') {
+          data[key] = 'Sim';
+        } else {
+          data[key] = value.toString().replace(',', '.');
+        }
       });
+
+      // Adiciona a foto em Base64
+      if (fotoBase64) {
+        data['Foto_Base64'] = fotoBase64;
+      }
 
       fetch(SCRIPT_URL, {
         method: 'POST',
@@ -304,20 +649,23 @@
       })
       .then(response => response.text())
       .then(retorno => {
+        loadingElement.classList.remove('active');
         statusElement.textContent = "";
         mensagem.textContent = retorno.includes("sucesso") ?
-          "✅ Dados salvos com sucesso!" :
+          "✅ Dados e foto salvos com sucesso!" :
           "⚠️ Erro: " + retorno;
         mensagem.className = retorno.includes("sucesso") ? "sucesso" : "erro";
         mensagem.style.display = "block";
 
         form.reset();
+        photoPreview.innerHTML = '';
         latitudeInput.value = '';
         longitudeInput.value = '';
 
         setTimeout(() => mensagem.style.display = "none", 4000);
       })
       .catch(error => {
+        loadingElement.classList.remove('active');
         statusElement.textContent = "";
         mensagem.textContent = "❌ Erro ao enviar dados.";
         mensagem.className = "erro";
@@ -325,8 +673,8 @@
         console.error(error);
         setTimeout(() => mensagem.style.display = "none", 4000);
       });
-    });
+    }
   </script>
 </body>
 </html>
-
+Atualizar HTML e scripts para exibir localização no QGIS - Manus
