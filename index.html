@@ -154,10 +154,6 @@
       margin-bottom: 20px;
       border: 1px solid var(--color-secondary);
     }
-    
-    .coordenadas p strong {
-        color: var(--color-primary);
-    }
 
     button {
       background-color: var(--color-primary);
@@ -180,10 +176,6 @@
     
     button[type="button"] {
         background-color: var(--color-secondary);
-    }
-    
-    button[type="button"]:hover {
-        background-color: var(--color-primary);
     }
 
     #mensagem {
@@ -225,14 +217,6 @@
       font-size: 0.85em;
     }
 
-    .footer p {
-      margin: 5px 0;
-    }
-
-    .footer strong {
-      color: var(--color-primary);
-    }
-
     .loading {
       display: none;
       text-align: center;
@@ -248,10 +232,6 @@
     @media (max-width: 600px) {
         .form-row {
             grid-template-columns: 1fr;
-        }
-        
-        #arvoreForm {
-            padding: 15px;
         }
     }
   </style>
@@ -269,13 +249,10 @@
       <div class="form-section">
         <div class="coordenadas">
           <p><strong>Localização GPS:</strong></p>
-
           <label for="latitude">Latitude:</label>
           <input type="text" id="latitude" name="Latitude" readonly required>
-
           <label for="longitude">Longitude:</label>
           <input type="text" id="longitude" name="Longitude" readonly required>
-
           <button type="button" onclick="getLocation()">Capturar Localização</button>
           <p id="status"></p>
         </div>
@@ -381,9 +358,9 @@
         </div>
       </div>
 
-      <!-- Seção de Riscos à Pessoas -->
+      <!-- Seção de Riscos às Pessoas -->
       <div class="form-section">
-        <h3 class="section-title">Riscos à Pessoas</h3>
+        <h3 class="section-title">Riscos às Pessoas</h3>
         
         <div class="form-row">
           <div>
@@ -502,7 +479,8 @@
     const mensagem = document.getElementById('mensagem');
     const loadingElement = document.getElementById('loading');
 
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzgkbU9qMIWOzldqaNfxCgY70WivzUXqhkt87CYwZXn-3_-R9JuXfP8vjAsZekItgW8/exec';
+    // ⚠️ ATUALIZE ESTA URL COM A URL DO SEU APP SCRIPT ⚠️
+    const SCRIPT_URL = 'https://script.google.com/macros/s/SUA_URL_AQUI/exec';
 
     function getLocation() {
       statusElement.textContent = "Capturando localização...";
@@ -546,8 +524,6 @@
       }
 
       loadingElement.classList.add('active');
-      statusElement.textContent = "Enviando dados...";
-
       enviarDados();
     });
 
@@ -574,7 +550,7 @@
         }
       });
       
-      // CHECKBOXES - LISTA COMPLETA E CORRETA
+      // CHECKBOXES
       const checkboxes = [
         'Cupim_Broca', 'Tronco_Oco_Cancro', 'Fungos_Apodrecedores',
         'Epifitas_Parasitas', 'Galhos_Secos', 'Abelhas_Vespas', 'Exsudacao',
@@ -586,12 +562,6 @@
         const checkbox = document.querySelector(`[name="${campo}"]`);
         formData.append(campo, checkbox && checkbox.checked ? 'Sim' : 'Não');
       });
-
-      // DEBUG: Mostrar todos os dados no console
-      console.log('=== DADOS SENDO ENVIADOS ===');
-      for (let [key, value] of formData.entries()) {
-        console.log(`${key}: ${value}`);
-      }
 
       // Converte FormData para URLSearchParams
       const params = new URLSearchParams();
@@ -607,28 +577,40 @@
       .then(retorno => {
         loadingElement.classList.remove('active');
         statusElement.textContent = "";
-        mensagem.textContent = retorno.includes("sucesso") ?
-          "✅ Dados salvos com sucesso!" :
-          "⚠️ Erro: " + retorno;
-        mensagem.className = retorno.includes("sucesso") ? "sucesso" : "erro";
-        mensagem.style.display = "block";
-
+        
         if (retorno.includes("sucesso")) {
+          mensagem.textContent = "✅ Dados salvos com sucesso!";
+          mensagem.className = "sucesso";
           form.reset();
           latitudeInput.value = '';
           longitudeInput.value = '';
+        } else {
+          mensagem.textContent = "❌ Erro: " + retorno;
+          mensagem.className = "erro";
         }
-
-        setTimeout(() => mensagem.style.display = "none", 4000);
+        
+        mensagem.style.display = "block";
+        setTimeout(() => mensagem.style.display = "none", 5000);
       })
       .catch(error => {
         loadingElement.classList.remove('active');
         statusElement.textContent = "";
-        mensagem.textContent = "❌ Erro ao enviar dados: " + error.message;
+        mensagem.textContent = "❌ Erro de conexão: " + error.message;
         mensagem.className = "erro";
         mensagem.style.display = "block";
-        console.error('Erro:', error);
-        setTimeout(() => mensagem.style.display = "none", 4000);
+        setTimeout(() => mensagem.style.display = "none", 5000);
+      });
+    }
+
+    // Debug helper
+    window.debugForm = function() {
+      console.log('=== DEBUG DO FORMULÁRIO ===');
+      console.log('Latitude:', latitudeInput.value);
+      console.log('Longitude:', longitudeInput.value);
+      
+      const campos = document.querySelectorAll('input, select');
+      campos.forEach(campo => {
+        console.log(campo.name + ':', campo.value, 'Checked:', campo.checked);
       });
     }
   </script>
